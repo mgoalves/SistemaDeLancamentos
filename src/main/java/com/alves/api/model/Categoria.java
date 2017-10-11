@@ -14,11 +14,13 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "categoria")
 public class Categoria {
 	
+	
+	//Atributos --------------------------------------------------
 	private Long id;
 	private String nome;
 	
 	
-	//GETTERS AND SETTERS
+	//GETTERS AND SETTERS ----------------------------------------
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getId() {
@@ -62,5 +64,7 @@ public class Categoria {
 			return false;
 		return true;
 	}
+	
+	//Métodos auxiliares ----------------------------------------------
 
 }

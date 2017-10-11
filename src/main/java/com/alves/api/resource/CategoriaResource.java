@@ -18,11 +18,23 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.alves.api.model.Categoria;
 import com.alves.api.repository.CategoriaRepository;
 
+/**
+ * 
+ * Classe Controladora para requisições relacionadas a categoria.
+ * 
+ * Métodos de listar, salvar, buscar por id.
+ * 
+ * @since 09/10/2017
+ * @author ALVES
+ *
+ */
 
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaResource {
 	
+	
+	//Injeções
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
