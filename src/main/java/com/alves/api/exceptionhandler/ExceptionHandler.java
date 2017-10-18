@@ -11,11 +11,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 
 /**
  * Classe responsável pelo tratamento de exceções
@@ -27,75 +28,81 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  */
 
 @ControllerAdvice
-public class ExceptionHandler extends ResponseEntityExceptionHandler{
-	
+public class ExceptionHandler extends ResponseEntityExceptionHandler {
+
 	@Autowired
 	private MessageSource messageSource;
-	
+
 	// Trata erros quando JSON vierem com paramêtros inválidos.
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-	
+
 		String msgUser = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
 		String msgDevelop = ex.getCause().toString();
-		
+
 		List<Error> errors = Arrays.asList(new Error(msgUser, msgDevelop));
-		
+
 		return handleExceptionInternal(ex, errors, headers, HttpStatus.BAD_REQUEST, request);
 	}
-	
-	
-	//Trata os erros que são provenientes de validações inválidas.
+
+	// Trata os erros que são provenientes de validações inválidas.
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		
-		List<Error> errors = errorList();
+
+		List<Error> errors = errorList(ex.getBindingResult());
 		return handleExceptionInternal(ex, errors, headers, HttpStatus.BAD_REQUEST, request);
 	}
-	
-	
-	//Função que cria lista de erros 
-	private List<Error> errorList() {
+
+	// Função que cria lista de erros
+	private List<Error> errorList(BindingResult bindingResult) {
 		
 		List<Error> errors =  new ArrayList<>();
 		
+		for (FieldError fieldError : bindingResult.getFieldErrors()) {
+		
+			String msgUser = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+			String msgDevelop = fieldError.toString();
 	
+			errors.add(new Error(msgUser, msgDevelop));
+		}
 		return errors;
 	}
-	
+
 	/**
 	 * Classe estática responsável apenas pela construção da mensagem de retorno
-	 * para o usuário. Ela precisa de 2 paramêtros - 
-	 * Mensagem para o usuário - mensagem clara.
-	 * Mensagem para o desenvolvedor - erro de console.
+	 * para o usuário. Ela precisa de 2 paramêtros - Mensagem para o usuário -
+	 * mensagem clara. Mensagem para o desenvolvedor - erro de console.
 	 * 
 	 * @author Alves
 	 */
 	public static class Error {
-		
-		//Attributes -------------------------
+
+		// Attributes -------------------------
 		private String msgUser;
 		private String msgDevelop;
-		
-		//Constuctor -------------------------
+
+		// Constuctor -------------------------
 		public Error(String msgUser, String msgDevelop) {
 			super();
 			this.msgUser = msgUser;
 			this.msgDevelop = msgDevelop;
 		}
-		
-		//Getters and Setters ----------------
+
+		// Getters and Setters ----------------
 		public String getMsgUser() {
 			return msgUser;
 		}
+
 		public void setMsgUser(String msgUser) {
 			this.msgUser = msgUser;
 		}
+
 		public String getMsgDevelop() {
 			return msgDevelop;
 		}
+
 		public void setMsgDevelop(String msgDevelop) {
 			this.msgDevelop = msgDevelop;
 		}
