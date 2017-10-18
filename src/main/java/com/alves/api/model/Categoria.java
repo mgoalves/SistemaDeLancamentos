@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "categoria")
@@ -32,6 +33,7 @@ public class Categoria {
 	
 	@NotNull
 	@NotBlank
+	@NotEmpty
 	@Column(nullable =  false, length = 60)
 	public String getNome() {
 		return nome;
