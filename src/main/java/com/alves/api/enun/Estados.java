@@ -1,4 +1,4 @@
-package com.alves.api.model;
+package com.alves.api.enun;
 
 public enum Estados {
 	

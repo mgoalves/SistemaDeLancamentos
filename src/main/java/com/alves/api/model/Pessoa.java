@@ -1,5 +1,7 @@
 package com.alves.api.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -13,7 +15,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "pessoa")
-public class Pessoa {
+public class Pessoa implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	//Atributos
 	private Long id;
