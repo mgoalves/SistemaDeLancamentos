@@ -25,6 +25,7 @@ public class Categoria {
 	//GETTERS AND SETTERS ----------------------------------------
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(unique = true)
 	public Long getId() {
 		return id;
 	}
