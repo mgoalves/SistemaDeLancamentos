@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -41,6 +42,7 @@ public class Pessoa implements Serializable {
 	
 	@NotNull
 	@NotEmpty
+	@Size(min = 3, max = 60)
 	@Column(nullable =  false, length = 60)
 	public String getNome() {
 		return nome;
@@ -49,7 +51,7 @@ public class Pessoa implements Serializable {
 		this.nome = nome;
 	}
 	
-	@NotEmpty
+	@NotNull
 	@Column(nullable =  false)
 	public Boolean getAtivo() {
 		return ativo;
