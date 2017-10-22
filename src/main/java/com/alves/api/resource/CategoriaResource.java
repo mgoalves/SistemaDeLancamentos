@@ -39,15 +39,18 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
+	//Listar categorias
 	@GetMapping
 	public List<Categoria> list() {
 		
 		return categoriaRepository.findAll();
 	}
 	
+	//Salvar categoria
 	@PostMapping
 	public ResponseEntity<Categoria> save(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
 		
+		//Salva no banco e retorna com ID para mostrar para o user
 		Categoria categoriaSalva = categoriaRepository.save(categoria);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
@@ -57,6 +60,7 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).body(categoriaSalva);
 	}
 	
+	//Buscar por ID
 	@GetMapping({"/{id}"})
 	public ResponseEntity<Categoria> searchById(@PathVariable Long id) {
 		
