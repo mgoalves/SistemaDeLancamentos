@@ -65,7 +65,7 @@ public class CategoriaResource {
 	public ResponseEntity<Categoria> searchById(@PathVariable Long id) {
 		
 		Categoria categoria = categoriaRepository.findOne(id);
-		return categoria != null ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
+		return categoria != null ? ResponseEntity.ok(categoria) : ResponseEntity.noContent().build();
 	}
 
 }
