@@ -35,21 +35,22 @@ public class PessoaResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Pessoa> save(@Valid @RequestBody Pessoa pessoa, HttpServletResponse reponse) {
+	public ResponseEntity<Pessoa> save(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
 		
 		//Salva no banco e adiciona a variável pessoa.
 		Pessoa pessoaSalva = pessoaRepository.save(pessoa);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
 				.buildAndExpand(pessoaSalva.getId()).toUri();
+		response.setHeader("Location", uri.toASCIIString());
 		
 		return ResponseEntity.created(uri).body(pessoaSalva);
 	}
 
 	@GetMapping("/{id}")
-	public Pessoa searchByid(@PathVariable Long id) {
+	public ResponseEntity<Pessoa> searchByid(@PathVariable Long id) {
 		
-		//Retorna pessoa com aquele ID especifico.
-		return pessoaRepository.findOne(id);
+		Pessoa pes = pessoaRepository.findOne(id);
+		 return pes != null ? ResponseEntity.ok(pes) : ResponseEntity.notFound().build();
 	}
 }

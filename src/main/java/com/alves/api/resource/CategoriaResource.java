@@ -52,16 +52,16 @@ public class CategoriaResource {
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
 							.buildAndExpand(categoriaSalva.getId()).toUri();
-		
 		response.setHeader("Location", uri.toASCIIString());
 		
 		return ResponseEntity.created(uri).body(categoriaSalva);
 	}
 	
 	@GetMapping({"/{id}"})
-	public Categoria searchById(@PathVariable Long id) {
+	public ResponseEntity<Categoria> searchById(@PathVariable Long id) {
 		
-		return categoriaRepository.findOne(id);
+		Categoria categoria = categoriaRepository.findOne(id);
+		return categoria != null ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
 	}
 
 }
