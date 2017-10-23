@@ -6,7 +6,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.Size;
 
-import com.alves.api.enun.Estados;
+import com.alves.api.enums.Estados;
 
 @Embeddable
 public class Endereco {
