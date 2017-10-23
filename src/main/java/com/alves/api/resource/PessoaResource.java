@@ -83,4 +83,12 @@ public class PessoaResource {
 
 		return ResponseEntity.ok(pessoaSalva);
 	}
+	
+	// Atualiza somente o status
+	@PutMapping("/{id}/status")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void statusUpdate(@PathVariable Long id, @Valid @RequestBody Boolean ativo) {
+		
+		pessoaService.statusUpdate(id, ativo);
+	}
 }

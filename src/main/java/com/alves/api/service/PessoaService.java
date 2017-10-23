@@ -21,23 +21,35 @@ public class PessoaService {
 	private PessoaRepository pessoaRepository;
 
 	public Pessoa fullUpdate(Long id, Pessoa pessoa) {
+
+		Pessoa pessoaSalva = searchById(id);
+		// Copia propriedades ignorando id
+		BeanUtils.copyProperties(pessoa, pessoaSalva, "id");
+		// Salva pessoa com os dados atualizados
+		pessoaRepository.save(pessoaSalva);
+
+		return pessoaSalva;
+	}
+	
+	//Método que somente troca o Status - busca, troca e salva
+	public void statusUpdate(Long id, Boolean ativo) {
 		
-		//Busca do banco dados atuais.
+		Pessoa pessoaSalva = searchById(id);
+		pessoaSalva.setAtivo(ativo);		
+		pessoaRepository.save(pessoaSalva);
+	}
+
+	//Método para buscar por id
+	private Pessoa searchById(Long id) {
+		
+		// Busca do banco dados atuais.
 		Pessoa pessoaSalva = pessoaRepository.findOne(id);
-		
-		//Faz uma análise para manter dados coerentes e evitar null pointer exception
+		// Faz uma análise para manter dados coerentes e evitar null pointer exception
 		if (pessoaSalva == null) {
-			
-			//Lança exceção para ser tratada pela HANDLE EXCEPTION
+
+			// Lança exceção para ser tratada pela HANDLE EXCEPTION
 			throw new EmptyResultDataAccessException(1);
-		}
-			
-			//Copia propriedades ignorando id
-			BeanUtils.copyProperties(pessoa, pessoaSalva, "id");
-			
-			//Salva pessoa com os dados atualizados
-			pessoaRepository.save(pessoaSalva);
-				
+		}		
 		return pessoaSalva;
 	}
 
