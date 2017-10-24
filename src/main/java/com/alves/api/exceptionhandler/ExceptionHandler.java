@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -82,6 +84,24 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	
 	
+	//Trata exceções quando entidades vinculadas não foram encontradas
+	@org.springframework.web.bind.annotation.ExceptionHandler({ DataIntegrityViolationException.class})
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
+		
+		
+		String msgUser = messageSource.getMessage("recurso.operacao-nao-permtida", null, LocaleContextHolder.getLocale());
+		
+		//Usa uma biblioteca extra para capturar exatamente a causa do erro
+		String msgDevelop = ExceptionUtils.getRootCauseMessage(ex);
+
+		List<Error> errors = Arrays.asList(new Error(msgUser, msgDevelop));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	
+	
 	
 
 	// Função que cria lista de erros
@@ -99,10 +119,6 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 		return errors;
 	}
 	
-	
-	
-	
-
 	/**
 	 * Classe estática responsável apenas pela construção da mensagem de retorno
 	 * para o usuário. Ela precisa de 2 paramêtros - Mensagem para o usuário -

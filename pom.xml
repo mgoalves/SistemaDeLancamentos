@@ -51,14 +51,23 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Hibernate com java8 -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-java8</artifactId>
 		</dependency>
 		
+		<!-- Biblioteca Jackson - Auxilia na formatação de datas -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+		
+		<!-- Commons Lang - nos auxilia a vários aspecitos (Pegar exceções) -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
 		</dependency>
 	</dependencies>
 
