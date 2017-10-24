@@ -36,7 +36,6 @@ public class Lancamento implements Serializable {
 	private BigDecimal valor;
 	private String observacao;
 	private TipoLancamento tipoLancamento;
-	
 	private Pessoa pessoa;
 	private Categoria categoria;
 	
@@ -52,6 +51,7 @@ public class Lancamento implements Serializable {
 		this.id = id;
 	}
 	
+	
 	@NotNull
 	@NotBlank
 	@NotEmpty
@@ -64,6 +64,7 @@ public class Lancamento implements Serializable {
 		this.descricao = descricao;
 	}
 	
+	
 	//@Temporal(TemporalType.DATE)
 	@NotNull
 	@Column(name = "data_vencimento", nullable = false)
@@ -74,6 +75,7 @@ public class Lancamento implements Serializable {
 		this.dataVencimento = dataVencimento;
 	}
 	
+	
 	//@Temporal(TemporalType.DATE)
 	@Column(name = "data_pagamento")
 	public LocalDate getDataPagamento() {
@@ -82,6 +84,7 @@ public class Lancamento implements Serializable {
 	public void setDataPagamento(LocalDate dataPagamento) {
 		this.dataPagamento = dataPagamento;
 	}
+	
 	
 	@NotNull
 	@Column(nullable = false, precision = 10, scale = 2)
@@ -92,6 +95,7 @@ public class Lancamento implements Serializable {
 		this.valor = valor;
 	}
 	
+	
 	@Size(max = 100)
 	@Column(length = 100)
 	public String getObservacao() {
@@ -101,10 +105,8 @@ public class Lancamento implements Serializable {
 		this.observacao = observacao;
 	}
 	
-	@NotNull
-	@NotEmpty
+	
 	@Enumerated(EnumType.STRING)
-	@Size(max = 20)
 	@Column(nullable = false, length = 20)
 	public TipoLancamento getTipoLancamento() {
 		return tipoLancamento;
@@ -112,6 +114,7 @@ public class Lancamento implements Serializable {
 	public void setTipoLancamento(TipoLancamento tipoLancamento) {
 		this.tipoLancamento = tipoLancamento;
 	}
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "id_pessoa")
