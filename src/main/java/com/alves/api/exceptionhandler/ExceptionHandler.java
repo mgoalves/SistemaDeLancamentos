@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.alves.api.exception.PessoaInativaException;
+import com.alves.api.exception.PessoaInexistenteException;
+
 /**
  * Classe responsável pelo tratamento de exceções
  * 
@@ -100,8 +103,29 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
+	//Trata pessoas inexistentes
+	@org.springframework.web.bind.annotation.ExceptionHandler({PessoaInexistenteException.class})
+	public ResponseEntity<Object> PessoaInexistenteException(PessoaInexistenteException ex) {
+		
+		String msgUser = messageSource.getMessage("recursopessoa-inexistente", null, LocaleContextHolder.getLocale());
+		String msgDevelop = ex.toString();
+
+		List<Error> errors = Arrays.asList(new Error(msgUser, msgDevelop));
+		
+		return ResponseEntity.badRequest().body(errors);
+	}
 	
-	
+	//Trata pessoas inativas
+	@org.springframework.web.bind.annotation.ExceptionHandler({PessoaInativaException.class})
+	public ResponseEntity<Object> PessoaInativaException(PessoaInativaException ex) {
+		
+		String msgUser = messageSource.getMessage("recursopessoa-inativa", null, LocaleContextHolder.getLocale());
+		String msgDevelop = ex.toString();
+
+		List<Error> errors = Arrays.asList(new Error(msgUser, msgDevelop));
+		
+		return ResponseEntity.badRequest().body(errors);
+	}
 	
 
 	// Função que cria lista de erros

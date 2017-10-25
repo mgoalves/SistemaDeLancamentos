@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.alves.api.model.Lancamento;
 import com.alves.api.repository.LancamentoRepository;
+import com.alves.api.service.LancamentoService;
 
 @RestController
 @RequestMapping("/lancamentos")
@@ -26,6 +27,9 @@ public class LancamentoResource {
 	//Injeções
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
+	@Autowired
+	private LancamentoService lancamentoService;
+	
 
 	//Retorna lista de lançamentos completos.
 	@GetMapping
@@ -38,7 +42,7 @@ public class LancamentoResource {
 	@PostMapping
 	public ResponseEntity<Lancamento> save(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) {
 		
-		Lancamento lancamentoSalvo = lancamentoRepository.save(lancamento);
+		Lancamento lancamentoSalvo = lancamentoService.save(lancamento);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
 				.buildAndExpand(lancamentoSalvo.getId()).toUri();
