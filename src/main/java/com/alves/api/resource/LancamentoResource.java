@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.alves.api.model.Lancamento;
 import com.alves.api.repository.LancamentoRepository;
+import com.alves.api.repository.filter.LancamentoFilter;
 import com.alves.api.service.LancamentoService;
 
 @RestController
@@ -33,9 +34,9 @@ public class LancamentoResource {
 
 	//Retorna lista de lançamentos completos.
 	@GetMapping
-	public List<Lancamento> list() {
+	public List<Lancamento> searh(LancamentoFilter lancamentoFilter) {
 		
-		return lancamentoRepository.findAll();
+		return lancamentoRepository.filter(lancamentoFilter);
 	}
 	
 	//Salva no banco o lancamento 
