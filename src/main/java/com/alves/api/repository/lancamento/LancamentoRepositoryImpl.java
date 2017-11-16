@@ -11,6 +11,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.alves.api.model.Lancamento;
@@ -22,7 +25,10 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 	@PersistenceContext
 	private EntityManager manager;
 
-	public List<Lancamento> filter(LancamentoFilter lancamentoFilter) {
+	
+	
+	
+	public Page<Lancamento> filter(LancamentoFilter lancamentoFilter, Pageable pageable) {
 
 		// Inicialização e construção da criteria.
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
@@ -35,9 +41,16 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 
 		// Execução da query e retorno dos resultados.
 		TypedQuery<Lancamento> query = manager.createQuery(criteria);
-		return query.getResultList();
+		restrictionsForPages(query, pageable);
+		
+		return new PageImpl<>(query.getResultList(), pageable, total(lancamentoFilter));
 	}
 
+
+
+
+
+	//Adicionando restrições para a consulta.
 	private Predicate[] doRestrictions(LancamentoFilter lancamentoFilter, CriteriaBuilder builder,
 			Root<Lancamento> root) {
 
@@ -46,27 +59,54 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		//Adiciona restrição para descrição
 		if (!StringUtils.isEmpty(lancamentoFilter.getDescricao())) {
 			
-			predicates.add(
-					builder.like(
+			predicates.add(builder.like(
 							builder.lower(root.get("descricao")), 
 							"%" + lancamentoFilter.getDescricao().toLowerCase() + "%")
 					);
 		}
 		if (lancamentoFilter.getDataVencimentoDe() != null) {
 			
-			predicates.add(
-					builder.greaterThanOrEqualTo(root.get("dataVencimento"), 
-							lancamentoFilter.getDataVencimentoDe())
+			predicates.add(builder.greaterThanOrEqualTo(
+						root.get("dataVencimento"), 
+						lancamentoFilter.getDataVencimentoDe())
 					);
 		}
 		if (lancamentoFilter.getDataVencimentoAte() != null) {
 			
 			predicates.add(builder.lessThanOrEqualTo(
-					root.get("dataVencimento"),
-					lancamentoFilter.getDataVencimentoAte())
+						root.get("dataVencimento"), 
+						lancamentoFilter.getDataVencimentoAte())
 					);
 		}
 
 		return predicates.toArray(new Predicate[predicates.size()]);
+	}
+	
+	
+	
+	
+	private void restrictionsForPages(TypedQuery<Lancamento> query, Pageable pageable) {
+		int paginaAtual = pageable.getPageNumber();
+		int totalRegistrosPorPagina = pageable.getPageSize();
+		int primeiroRegistroDaPagina = paginaAtual * totalRegistrosPorPagina;
+		
+		query.setFirstResult(primeiroRegistroDaPagina);
+		query.setMaxResults(totalRegistrosPorPagina);
+	}
+	
+	
+	
+	
+	private Long total(LancamentoFilter lancamentoFilter) {
+		
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+		Root<Lancamento> root = criteria.from(Lancamento.class);
+		
+		Predicate[] predicates = doRestrictions(lancamentoFilter, builder, root);
+		criteria.where(predicates);
+		
+		criteria.select(builder.count(root));
+		return manager.createQuery(criteria).getSingleResult();
 	}
 }

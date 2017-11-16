@@ -1,12 +1,13 @@
 package com.alves.api.resource;
 
 import java.net.URI;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,9 +38,9 @@ public class LancamentoResource {
 
 	//Retorna lista de lançamentos completos.
 	@GetMapping
-	public List<Lancamento> searh(LancamentoFilter lancamentoFilter) {
+	public Page<Lancamento> searh(LancamentoFilter lancamentoFilter, Pageable pageable) {
 		
-		return lancamentoRepository.filter(lancamentoFilter);
+		return lancamentoRepository.filter(lancamentoFilter, pageable);
 	}
 	
 	//Salva no banco o lancamento 
