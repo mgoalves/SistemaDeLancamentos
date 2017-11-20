@@ -25,7 +25,7 @@ public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long codigo;
+	private Long id;
 	private String nome;
 	private String email;
 	private String senha;
@@ -35,11 +35,11 @@ public class Usuario implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(unique = true, nullable = false)
-	public Long getCodigo() {
-		return codigo;
+	public Long getId() {
+		return id;
 	}
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@NotEmpty
@@ -67,8 +67,8 @@ public class Usuario implements Serializable {
 
 	@NotEmpty
 	@NotNull
-	@Size(min = 2, max = 20)
-	@Column(nullable = false, length = 20)
+	@Size(min = 2, max = 60)
+	@Column(nullable = false, length = 60)
 	public String getSenha() {
 		return senha;
 	}
@@ -77,21 +77,22 @@ public class Usuario implements Serializable {
 	}
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "usuario_permissao", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_permisao"))
+	@JoinTable(name = "usuario_permissao", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_permissao"))
 	public List<Permissao> getPermissoes() {
 		return permissoes;
 	}
 	public void setPermissoes(List<Permissao> permissoes) {
 		this.permissoes = permissoes;
 	}
+	
 
 	// Equals and HashCode ------------------------------------------------
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 	@Override
@@ -103,15 +104,15 @@ public class Usuario implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		if (codigo == null) {
-			if (other.codigo != null)
-				return false;
-		} else if (!codigo.equals(other.codigo))
-			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
 		} else if (!email.equals(other.email))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
