@@ -24,56 +24,64 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.alves.api.model.Lancamento;
 import com.alves.api.repository.LancamentoRepository;
 import com.alves.api.repository.filter.LancamentoFilter;
+import com.alves.api.repository.projection.LancamentoProjection;
 import com.alves.api.service.LancamentoService;
 
 @RestController
 @RequestMapping("/lancamentos")
 public class LancamentoResource {
 
-	//Injeções
+	// Injeções
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
 	@Autowired
 	private LancamentoService lancamentoService;
-	
 
-	//Retorna lista de lançamentos completos.
+	// Retorna lista de lançamentos completos.
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public Page<Lancamento> searh(LancamentoFilter lancamentoFilter, Pageable pageable) {
-		
+
 		return lancamentoRepository.filter(lancamentoFilter, pageable);
 	}
-	
-	//Salva no banco o lancamento 
+
+	// Retorna lista de lançamentos completos.
+	@GetMapping(params = "projection")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public Page<LancamentoProjection> projection(LancamentoFilter lancamentoFilter, Pageable pageable) {
+
+		return lancamentoRepository.projection(lancamentoFilter, pageable);
+	}
+
+	// Salva no banco o lancamento
 	@PostMapping
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and #oauth2.hasScope('write')")
 	public ResponseEntity<Lancamento> save(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) {
-		
+
 		Lancamento lancamentoSalvo = lancamentoService.save(lancamento);
-		
+
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
 				.buildAndExpand(lancamentoSalvo.getId()).toUri();
 		response.setHeader("Location", uri.toASCIIString());
-		
+
 		return ResponseEntity.created(uri).body(lancamentoSalvo);
 	}
-	
-	//Retorna apenas o lancamento requerido via ID.
+
+	// Retorna apenas o lancamento requerido via ID.
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public ResponseEntity<Lancamento> searchById(@PathVariable Long id) {
-		
+
 		Lancamento lancamentoSalvo = lancamentoRepository.findOne(id);
-		
+
 		return lancamentoSalvo != null ? ResponseEntity.ok(lancamentoSalvo) : ResponseEntity.noContent().build();
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasAuthority('ROLE_REMOVER_LANCAMENTO') and #oauth2.hasScope('write')")
 	public void deletebyId(@PathVariable Long id) {
-		
+
 		lancamentoRepository.delete(id);
 	}
 }
