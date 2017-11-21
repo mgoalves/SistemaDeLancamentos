@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ public class PessoaResource {
 	// ---------------------------------------------------------------
 
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
 	public List<Pessoa> list() {
 
 		// Retorna da lista de Pessoas
@@ -44,6 +46,7 @@ public class PessoaResource {
 	}
 
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Pessoa> save(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
 
 		// Salva no banco e adiciona a variável pessoa.
@@ -58,6 +61,7 @@ public class PessoaResource {
 
 	// Buscar pessoa por ID
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
 	public ResponseEntity<Pessoa> searchByid(@PathVariable Long id) {
 
 		// Buscar do banco
@@ -70,6 +74,7 @@ public class PessoaResource {
 	// Deletenado pessoa por id
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_PESSOA') and #oauth2.hasScope('write')")
 	public void delete(@PathVariable Long id) {
 
 		pessoaRepository.delete(id);
@@ -77,6 +82,7 @@ public class PessoaResource {
 
 	// Atualizando pessoa completa
 	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Pessoa> fullUpdate(@PathVariable Long id, @Valid @RequestBody Pessoa pessoa) {
 
 		Pessoa pessoaSalva = pessoaService.fullUpdate(id, pessoa);
@@ -87,6 +93,7 @@ public class PessoaResource {
 	// Atualiza somente o status
 	@PutMapping("/{id}/status")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public void statusUpdate(@PathVariable Long id, @Valid @RequestBody Boolean ativo) {
 		
 		pessoaService.statusUpdate(id, ativo);
