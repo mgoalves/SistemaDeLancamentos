@@ -6,10 +6,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ApiProperty {
 	
 	//Atributo para permissões de outros servidores
-	final private String originPermitida = "http//localhost:8000";
+	private String originPermitida = "http//localhost:8000";
 
 	public String getOriginPermitida() {
 		return originPermitida;
+	}
+	public void setOriginPermitida(String originPermitida) {
+		this.originPermitida = originPermitida;
 	}
 
 
