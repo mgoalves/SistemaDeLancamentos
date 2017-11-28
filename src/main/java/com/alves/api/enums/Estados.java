@@ -32,6 +32,7 @@ public enum Estados {
 		
 	    private String descricao;
     
+	    //Construtor.
 	    Estados(String descricao) {
 	     
 	        this.descricao = descricao;
