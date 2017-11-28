@@ -2,7 +2,7 @@ package com.alves.api.enums;
 
 public enum Estados {
 	
-		AC(""),
+		AC("Acre"),
 		AL(""),
 		AP(""),
 		AM(""),
