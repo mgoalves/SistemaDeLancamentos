@@ -8,7 +8,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.alves.api.model.Usuario;
 import com.alves.api.repository.UsuarioRepository;
+import com.alves.api.securityutil.UsuarioSistema;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService{
@@ -30,7 +30,7 @@ public class AppUserDetailsService implements UserDetailsService{
 		Optional<Usuario> usuarioOptinal = usuarioRepository.findByEmail(email);
 		Usuario usuario = usuarioOptinal.orElseThrow(() -> new UsernameNotFoundException("Usuário e/ou senha incorretos"));
 		
-		return new User(email, usuario.getSenha(), getPermissoes(usuario));
+		return new UsuarioSistema(usuario, getPermissoes(usuario));
 	}
 
 
