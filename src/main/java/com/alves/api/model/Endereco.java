@@ -6,7 +6,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.Size;
 
-import com.alves.api.enums.Estados;
+import com.alves.api.enums.Estado;
 
 @Embeddable
 public class Endereco {
@@ -18,7 +18,7 @@ public class Endereco {
 	private String bairro;
 	private String cep;
 	private String cidade;
-	private Estados estados;
+	private Estado estado;
 	
 	
 		
@@ -81,11 +81,11 @@ public class Endereco {
 	
 	@Size(min = 2, max = 2)
 	@Enumerated(EnumType.STRING)
-	public Estados getEstados() {
-		return estados;
+	public Estado getEstado() {
+		return estado;
 	}
-	public void setEstados(Estados estados) {
-		this.estados = estados;
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 	
 	

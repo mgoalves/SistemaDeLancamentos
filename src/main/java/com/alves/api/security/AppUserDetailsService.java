@@ -18,7 +18,7 @@ import com.alves.api.repository.UsuarioRepository;
 import com.alves.api.securityutil.UsuarioSistema;
 
 @Service
-public class AppUserDetailsService implements UserDetailsService{
+public class AppUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;

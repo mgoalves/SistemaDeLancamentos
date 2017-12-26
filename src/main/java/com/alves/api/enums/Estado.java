@@ -1,9 +1,9 @@
 package com.alves.api.enums;
 
-public enum Estados {
+public enum Estado {
 	
 		AC("Acre"),
-		AL(""),
+		AL("Alagoas"),
 		AP(""),
 		AM(""),
 		BA(""),
@@ -14,26 +14,26 @@ public enum Estados {
 		MA(""),
 	 	MT(""),
 	   	MS(""),
-	 	MG(""),
+	 	MG("Minas Gerais"),
 		PA(""),
 		PB(""),
 		PR(""),
 		PE(""),
 		PI(""),
-		RJ(""),
+		RJ("Rio de Janeiro"),
 		RN(""),
 		RS(""),
 		RO(""),
 		RR(""),
-	 	SC(""),
+	 	SC("Santa Catarina"),
 	 	SP(""),
 		SE(""),
-		TO("");
+		TO("Tocantins");
 		
 	    private String descricao;
     
 	    //Construtor.
-	    Estados(String descricao) {
+	    Estado(String descricao) {
 	     
 	        this.descricao = descricao;
 	    }    
