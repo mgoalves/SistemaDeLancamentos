@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.alves.api.model.Pessoa;
 import com.alves.api.repository.PessoaRepository;
+import com.alves.api.repository.filter.PessoaFilter;
 import com.alves.api.service.PessoaService;
 
 @RestController
@@ -39,10 +40,10 @@ public class PessoaResource {
 
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
-	public List<Pessoa> list() {
+	public List<Pessoa> list(PessoaFilter pessoaFilter) {
 
 		// Retorna da lista de Pessoas
-		return pessoaRepository.findAll();
+		return pessoaRepository.filter(pessoaFilter);
 	}
 
 	@PostMapping
