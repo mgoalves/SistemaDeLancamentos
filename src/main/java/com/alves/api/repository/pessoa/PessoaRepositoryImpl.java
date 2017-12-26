@@ -50,6 +50,7 @@ public class PessoaRepositoryImpl implements PessoaRepositoryQuery {
 			predicates.add(
 					builder.like(builder.lower(root.get("nome")), "%" + pessoaFilter.getNome().toLowerCase() + "%"));
 		}
+		// TODO Poder pesquisar por cidade
 
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
