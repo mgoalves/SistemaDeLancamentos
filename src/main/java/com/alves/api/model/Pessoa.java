@@ -98,9 +98,7 @@ public class Pessoa implements Serializable {
 		return true;
 	}
 	
-	//Métodos Auxiliares -------------------------------------------------------- 
-	
-	
+	//Métodos Auxiliares --------------------------------------------------------
 	@JsonIgnore
 	@Transient
 	public Boolean isInativo(){
